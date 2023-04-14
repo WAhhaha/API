@@ -6,6 +6,7 @@ import cors from 'cors';
 import Response from './response.js';
 import HttpStatus from './HttpStatus.js';
 import logger from './logger.js';
+import testRoutes from './routes/test.routes.js';
 
 
 dotenv.config();
@@ -14,7 +15,7 @@ const app = express();
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-
-app.get('/', (req, res) => res.send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, 'SAproject API, v1.0.0, working well')));
+app.use('/test', testRoutes);
+app.get('/', (req, res) => res.send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, 'SAproject API with openai, v1.0.0, working well')));
 
 app.listen(PORT, () => logger.info(`Server running on: ${ip.address()}:${PORT}`));

@@ -1,9 +1,9 @@
 //import fs from 'fs';
 import { Configuration, OpenAIApi } from 'openai';
 
-import HttpStatus from './HttpStatus.js';
-import Response from './response.js';
-import logger from './logger.js';
+import HttpStatus from '../HttpStatus.js';
+import Response from '../response.js';
+import logger from '../logger.js';
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_APIKEY,
@@ -34,7 +34,7 @@ export default async function (req, res) {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
       prompt: prompt1(target),
-      temperature: 0.5,
+      temperature: 0,
     });
 
     res.status(HttpStatus.OK.code)
@@ -63,4 +63,4 @@ score:`;
 }
 
 
-//sentimentAnalyze("hello there~");
+
