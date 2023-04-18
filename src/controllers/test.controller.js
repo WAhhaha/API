@@ -7,3 +7,7 @@ export const getFlag = (req, res) => {
   res.status(HttpStatus.OK.code)
     .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `Flag fetched`, 'this is your flag!'));
 };
+
+export const testanalyzing = (req, res) => {
+   
+};
