@@ -14,6 +14,9 @@ const QUERY = {
 
   TRUNCATE_sentiments:      'TRUNCATE TABLE sentiments',
 
+  SELECT_last_titleId:    'SELECT MAX(titleId) AS lastId FROM titles',
+
+  SELECT_AVG_sentimentscore:  'SELECT AVG(score) AS averageScore FROM sentiments',
   //DELETE_SENTIMENT:     'DELETE FROM sentiments WHERE sentimentId = ?',
 
   //SELECT_MAX_CONTENTID: 'SELECT MAX(contentId) AS latestId FROM contents',

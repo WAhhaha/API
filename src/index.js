@@ -8,8 +8,9 @@ import Response from './response.js';
 import HttpStatus from './HttpStatus.js';
 import logger from './logger.js';
 
-import pttInsert from './functions/ptt.insert.js';
+
 import testRoutes from './routes/test.routes.js';
+import { insertData } from './functions/test.js';
 
 
 dotenv.config();
@@ -23,4 +24,4 @@ app.get('/', (req, res) => res.send(new Response(HttpStatus.OK.code, HttpStatus.
 
 app.listen(PORT, () => logger.info(`Server running on: ${ip.address()}:${PORT}`));
 
-//await pttInsert('/home/ahhaha9191/Documents/SAproject/API/src/json/content.json');
+insertData('/home/ahhaha9191/Documents/SAproject/API/src/json/content.json');
