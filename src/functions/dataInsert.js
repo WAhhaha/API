@@ -1,6 +1,5 @@
-import db from '../mysql.config.js';
-import {readfile} from './filesystem.js';
-import QUERY from '../query/sap.query.js';
+import db from '../db/mysql.config.js';
+import QUERY from '../db/mysql.query.js';
 
 export function insertTitle(data){
 
@@ -41,26 +40,5 @@ export function insertContent(data){
       }
     });
   });
-
 }
 
-export function waiting(time){
-
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve('resolved');
-    }, time);
-  });
-}
-
-export function getLastId() {
-
-  return new Promise((resolve, reject) => {
-    
-    db.query(QUERY.SELECT_last_titleId, (err, result) => {
-      
-      if(err) reject (err);
-      resolve(result);
-    });
-  });
-}

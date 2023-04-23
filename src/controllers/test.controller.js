@@ -1,8 +1,8 @@
-import HttpStatus from "../HttpStatus.js";
-import Response from "../response.js";
-import logger from "../logger.js";
-import database from "../mysql.config.js";
-import QUERY from "../query/sap.query.js";
+import HttpStatus from "../utils/HttpStatus.js";
+import Response from "../utils/response.js";
+import logger from "../utils/logger.js";
+import database from "../db/mysql.config.js";
+import QUERY from "../db/mysql.query.js";
 import analyze from "../functions/analyze.js";
 
 export const getFlag = (req, res) => {

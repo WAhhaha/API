@@ -1,7 +1,7 @@
 import { response } from 'express';
 import { Configuration, OpenAIApi } from 'openai';
 
-import logger from '../logger.js';
+import logger from '../utils/logger.js';
 
 const config = new Configuration({
     apiKey: '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',
