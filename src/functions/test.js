@@ -2,36 +2,65 @@ import db from '../mysql.config.js';
 import {readfile} from './filesystem.js';
 import QUERY from '../query/sap.query.js';
 
-export async function insertData(filepath){
-  
-  let file = readfile(filepath);
-  
-  for(let i = 0; i < file.PTT.length; i++){
+export function insertTitle(data){
 
-    let data = file.PTT[i];
-    let titleData = {
-      title: JSON.stringify(data.Title),
-      url: JSON.stringify(data.Url),
-    };
+  let title = {
+    title: data.Title,
+    url: data.Url,
+  };
 
-    db.query(QUERY.ADD_titles, Object.values(titleData), (err) => {
-      
+  return new Promise((resolve) => {
+
+    db.query(QUERY.ADD_titles, Object.values(title), (err, result) => {
+
       if(err) throw err;
-
-      db.query(QUERY.SELECT_last_titleId, (err, res) => {
-        
-        if(err) throw err;
-        if(res){
-
-          let contentData = {
-            titleId: res[0].lastId,
-            content: JSON.stringify(data.Contents),
-          };
-
-          db.query(QUERY.ADD_contents, Object.values(contentData));
-        }
-      })
+      resolve(result);
     });
+  });
+}
 
-  }
+export function insertContent(data){
+
+  return new Promise((resolve) => {
+
+    db.query(QUERY.SELECT_last_titleId, (err, res) => {
+
+      if(err) throw err;
+      if(res){
+
+        let content = {
+          titleId: res[0].lastId,
+          content: data.Contents,
+        };
+
+        db.query(QUERY.ADD_contents, Object.values(content), (err, res) => {
+
+          if(err) throw err;
+          resolve(res);
+        });
+      }
+    });
+  });
+
+}
+
+export function waiting(time){
+
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve('resolved');
+    }, time);
+  });
+}
+
+export function getLastId() {
+
+  return new Promise((resolve, reject) => {
+    
+    db.query(QUERY.SELECT_last_titleId, (err, result) => {
+      
+      if(err) reject (err);
+      resolve(result);
+    });
+  });
 }
