@@ -4,6 +4,8 @@ import logger from "../utils/logger.js";
 import database from "../db/mysql.config.js";
 import QUERY from "../db/mysql.query.js";
 import analyze from "../functions/analyze.js";
+import { getLastId } from "../dm/dm.functions.js";
+import { callAnalyzing, insertPTTdata } from "../dm/dm.system.js";
 
 export const getFlag = (req, res) => {
 
@@ -11,56 +13,36 @@ export const getFlag = (req, res) => {
     .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `Flag fetched`, 'this is your flag!'));
 };
 
-export const testanalyzing = (req, res) => {
+export const insertPTT = (req, res) => {
 
-  var maxtitles;
-  
-  database.query(QUERY.SELECT_MAX_titles, (error, results) => {
-    
-    if(!results){
+  insertPTTdata('/home/ahhaha9191/Documents/SAproject/API/src/json/content.json', (err, result) => {
 
-      logger.error(error.message);
+    if(err) {
+
+      logger.err(err.message);
       res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-        .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred(SELECT_MAX_titles)`));
-    } else {
-
-      maxtitles = results[0].maxtitles;
-      logger.info(`maxtitles = ${maxtitles}`);
-    }
-  });
-
-  for(let i = 1; i < maxtitles + 1; i++){
-
-    let sentimentscore = 2.5;
-    let objsentiemts = {
-      titleId: i,
-      score: sentimentscore,
-    };
-
-    database.query(QUERY.ADD_sentiments, Object.values(objsentiemts), (error, results) => {
-      
-      if(!results){
-
-        logger.error(error.message);
-        res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-          .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred(ADD_sentiments)`));
-      }
-    });
-  }
-
-  database.query(QUERY.SELECT_AVG_sentimentscore, (error, results) => {
-
-    if(!results){
-
-      logger.error(error.message);
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-        .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred(SELECT_AVG_sentimentscore)`));
+        .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred(insertPTT)`));
     } else {
 
       res.status(HttpStatus.OK.code)
-        .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `action successful(SELECT_AVG_sentimentscore)`), results[0].averageScore);
+        .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `action completed(insertPTT)`));
     }
   });
+};
 
-  //let result = await getCompletion([req.params.target], content);
+export const targetAnalyze = (req, res) => {
+  
+  callAnalyzing(Object.values(req.body), (err, result) => {
+    
+    if(!result) {
+
+      logger.err(err.message);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
+        .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred(targetAnalyze)`));
+    } else {
+
+      res.status(HttpStatus.OK.code)
+        .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `action completed(targetAnalyze)`));
+    }
+  });
 };

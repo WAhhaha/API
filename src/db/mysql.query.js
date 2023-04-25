@@ -8,13 +8,13 @@ const QUERY = {
   SELECT_content:       'SELECT content FROM contents WHERE titleId = ?',
   SELECT_sentiment:     'SELECT score FROM sentiments WHERE sentimentsId = ?',
 
-  ADD_titles:           'INSERT INTO titles(title, url) VALUES(?, ?)',
+  ADD_titles:           'INSERT INTO titles(source, title, url) VALUES(?, ?, ?)',
   ADD_contents:         'INSERT INTO contents(titleId, content) VALUES(?, ?)',
   ADD_sentiments:       'INSERT INTO sentiments(titleId, score) VALUES(?, ?)',
 
-  TRUNCATE_sentiments:      'TRUNCATE TABLE sentiments',
+  TRUNCATE_sentiments:  'TRUNCATE TABLE sentiments',
 
-  SELECT_last_titleId:    'SELECT MAX(titleId) AS lastId FROM titles',
+  SELECT_last_titleId:  'SELECT MAX(titleId) AS lastId FROM titles',
 
   SELECT_AVG_sentimentscore:  'SELECT AVG(score) AS averageScore FROM sentiments',
   //DELETE_SENTIMENT:     'DELETE FROM sentiments WHERE sentimentId = ?',

@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS sentiments;
 CREATE TABLE titles (
   titleId   INT UNSIGNED NOT NULL AUTO_INCREMENT,
 
+  source    TEXT(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   title     TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   url       TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
 
