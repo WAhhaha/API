@@ -4,7 +4,6 @@ import { Configuration, OpenAIApi } from 'openai';
 import logger from '../utils/logger.js';
 
 const config = new Configuration({
-    apiKey: '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',
 });
 const openai = new OpenAIApi(config);
 
