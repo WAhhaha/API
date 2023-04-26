@@ -2,7 +2,9 @@ import db from '../db/mysql.config.js';
 import QUERY from "../db/mysql.query.js";
 import analyze from "../functions/analyze.js";
 import { readfile } from "../functions/filesystem.js";
+import HttpStatus from '../utils/HttpStatus.js';
 import { insertTitle, getLastId, insertContent, selectContent } from "./dm.functions.js";
+import Response from '../utils/response.js';
 
 export async function insertPTTdata(path) {
 
@@ -20,7 +22,7 @@ export async function insertPTTdata(path) {
   }
 }
 
-export async function callAnalyzing(target) {
+export async function callAnalyzing(target, res) {
 
   var result = '';
   result = await new Promise((resolve) => {
@@ -62,10 +64,30 @@ export async function callAnalyzing(target) {
       db.query('INSERT INTO sentiments(titleId, score) VALUES(?, ?)', Object.values(sentiment), (err, result) => {
 
         if(err) throw err;
-        resolve(err);
+        resolve(result);
       });
     });
   }
+
+  result = await new Promise((resolve) => {
+
+    db.query('SELECT * FROM sentiments', (err, result) => {
+
+      if(!result) {
+
+        console.err(err.message);
+      } else {
+
+        resolve(result);
+      }
+    });
+  });
+
+  db.query('TRUNCATE TABLE sentiments');
+
+  res.status(HttpStatus.OK.code)
+    .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `fetched`, { sentiments: result }));
+
 }
 
 
