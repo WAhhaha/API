@@ -20,6 +20,7 @@ export function insertTitle(src, data){
   });
 }
 
+
 export function getLastId() {
 
   return new Promise((resolve) => {
@@ -77,3 +78,4 @@ export function insertSentiment(data) {
     });
   });
 }
+

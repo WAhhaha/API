@@ -5,7 +5,7 @@ import analyze from "../functions/analyze.js";
 import { readfile } from "../functions/filesystem.js";
 
 import HttpStatus from '../utils/HttpStatus.js';
-import { insertTitle, getLastId, insertContent, selectContent } from "./dm.functions.js";
+import { insertTitle, getLastId, insertContent, selectContent} from "./dm.functions.js";
 import Response from '../utils/response.js';
 import logger from '../utils/logger.js';
 
@@ -25,7 +25,8 @@ export async function insertPTTdata(path) {
   }
 }
 
-export async function createAnalyzeResults(reqId ,target, res) {
+
+export async function createAnalyzeResults(target, res) {
 
   var result = '';
   result = await new Promise((resolve) => {
@@ -36,13 +37,13 @@ export async function createAnalyzeResults(reqId ,target, res) {
 
         logger.err(err.message);
         res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-          .send(new Response(reqId, HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecting max(contentId)`));
+          .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecting max(contentId)`));
       }
 
       if(!result) {
 
         res.status(HttpStatus.NO_CONTENT.code)
-          .send(new Response(reqId, HttpStatus.NO_CONTENT.code, HttpStatus.NO_CONTENT.status, `no content has found`));
+          .send(new Response(HttpStatus.NO_CONTENT.code, HttpStatus.NO_CONTENT.status, `no content has found`));
       } else {
 
         resolve(result);
@@ -62,13 +63,13 @@ export async function createAnalyzeResults(reqId ,target, res) {
           
           logger.err(err.message);
           res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-            .send(new Response(reqId, HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecint contents`));
+            .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecint contents`));
         }
 
         if(!result) {
 
           res.status(HttpStatus.NO_CONTENT.code)
-            .send(new Response(reqId, HttpStatus.NO_CONTENT.code, HttpStatus.NO_CONTENT.status, `no content has found`));
+            .send(new Response(HttpStatus.NO_CONTENT.code, HttpStatus.NO_CONTENT.status, `no content has found`));
         } else {
 
           resolve(result);
@@ -96,7 +97,7 @@ export async function createAnalyzeResults(reqId ,target, res) {
 
           logger.err(err.message);
           res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-            .send(new Response(reqId, HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at inserting setiment results`));
+            .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at inserting setiment results`));
         } else {
 
           resolve(result);
@@ -105,23 +106,9 @@ export async function createAnalyzeResults(reqId ,target, res) {
     });
   }
 
-  result = await new Promise((resolve) => {
+  res.status(HttpStatus.CREATED.code)
+    .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `analyze results created`));
 
-    db.query('SELECT * FROM sentiments', (err, result) => {
-
-      if(!result) {
-
-        logger.err(err.message);
-      } else {
-
-        resolve(result);
-      }
-    });
-  });
-
-  return new Promise((resolve) => {
-    resolve(result);
-  });
 }
 
 
