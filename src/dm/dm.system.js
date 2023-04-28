@@ -1,10 +1,13 @@
 import db from '../db/mysql.config.js';
 import QUERY from "../db/mysql.query.js";
+
 import analyze from "../functions/analyze.js";
 import { readfile } from "../functions/filesystem.js";
+
 import HttpStatus from '../utils/HttpStatus.js';
-import { insertTitle, getLastId, insertContent, selectContent } from "./dm.functions.js";
+import { insertTitle, getLastId, insertContent, selectContent} from "./dm.functions.js";
 import Response from '../utils/response.js';
+import logger from '../utils/logger.js';
 
 export async function insertPTTdata(path) {
 
@@ -22,15 +25,29 @@ export async function insertPTTdata(path) {
   }
 }
 
-export async function callAnalyzing(target, res) {
+
+export async function createAnalyzeResults(target, res) {
 
   var result = '';
   result = await new Promise((resolve) => {
     
     db.query('SELECT MAX(contentId) AS lastId FROM contents', (err, result) => {
 
-      if(err) throw err;
-      resolve(result);
+      if(err) {
+
+        logger.err(err.message);
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
+          .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecting max(contentId)`));
+      }
+
+      if(!result) {
+
+        res.status(HttpStatus.NO_CONTENT.code)
+          .send(new Response(HttpStatus.NO_CONTENT.code, HttpStatus.NO_CONTENT.status, `no content has found`));
+      } else {
+
+        resolve(result);
+      }
     });
   });
 
@@ -42,8 +59,21 @@ export async function callAnalyzing(target, res) {
 
       db.query('SELECT content, titleId FROM contents WHERE contentId = ?', i, (err, result) => {
 
-        if(err) throw err;
-        resolve(result);
+        if(err) {
+          
+          logger.err(err.message);
+          res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
+            .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecint contents`));
+        }
+
+        if(!result) {
+
+          res.status(HttpStatus.NO_CONTENT.code)
+            .send(new Response(HttpStatus.NO_CONTENT.code, HttpStatus.NO_CONTENT.status, `no content has found`));
+        } else {
+
+          resolve(result);
+        }
       });
     });
 
@@ -63,30 +93,21 @@ export async function callAnalyzing(target, res) {
 
       db.query('INSERT INTO sentiments(titleId, score) VALUES(?, ?)', Object.values(sentiment), (err, result) => {
 
-        if(err) throw err;
-        resolve(result);
+        if(err) {
+
+          logger.err(err.message);
+          res.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
+            .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at inserting setiment results`));
+        } else {
+
+          resolve(result);
+        }
       });
     });
   }
 
-  result = await new Promise((resolve) => {
-
-    db.query('SELECT * FROM sentiments', (err, result) => {
-
-      if(!result) {
-
-        console.err(err.message);
-      } else {
-
-        resolve(result);
-      }
-    });
-  });
-
-  db.query('TRUNCATE TABLE sentiments');
-
-  res.status(HttpStatus.OK.code)
-    .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `fetched`, { sentiments: result }));
+  res.status(HttpStatus.CREATED.code)
+    .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `analyze results created`));
 
 }
 
