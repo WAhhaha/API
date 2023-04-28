@@ -77,11 +77,3 @@ export function insertSentiment(data) {
     });
   });
 }
-
-export async function multiAnalyzing(lastId, target) {
-  
-  for(let i = 1; i <= lastId; i++) {
-
-    
-  }
-}
