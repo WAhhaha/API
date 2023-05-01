@@ -1,5 +1,6 @@
 import express from 'express';
-import {getFlag, insertPTT, CreateTargetAnalyze, GetAnalyzeResults} from '../controllers/test.controller.js';
+import { getFlag, insertPTT, testPostData } from '../controllers/test.controller.js';
+import { createAnalysis, getSentiments } from '../controllers/main.controller.js';
 
 const testRoutes = express.Router();
 
@@ -7,13 +8,14 @@ const testRoutes = express.Router();
 testRoutes.route('/flag')  
   .get(getFlag);
 
-testRoutes.route('/insert')
-  .get(insertPTT);
+testRoutes.route('/')
+  .post(testPostData);
 
 testRoutes.route('/analyze')
-  .get(GetAnalyzeResults)
-  .post(CreateTargetAnalyze);
+  .get(getSentiments)
+  .post(createAnalysis);
 
-
+testRoutes.route('/insert')
+  .get(insertPTT);
 
 export default testRoutes;
