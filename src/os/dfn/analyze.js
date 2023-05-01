@@ -1,7 +1,5 @@
-import { response } from 'express';
 import { Configuration, OpenAIApi } from 'openai';
 
-import logger from '../utils/logger.js';
 
 const config = new Configuration({
 });
