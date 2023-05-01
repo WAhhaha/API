@@ -23,7 +23,7 @@ export const getSentiments = (request, response) => {
 
     if(err) {
 
-      logger.err(err.message);
+      logger.error(err.message);
       response.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
         .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred(getSentiments)`));
     }

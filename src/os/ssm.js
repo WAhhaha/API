@@ -16,7 +16,7 @@ export async function analyzing (response, target) {
 
       if(err) {
 
-        logger.err(err.message);
+        logger.error(err.message);
         response.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
           .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecting max(contentId)`));
       }
@@ -42,7 +42,7 @@ export async function analyzing (response, target) {
 
         if(err) {
           
-          logger.err(err.message);
+          logger.error(err.message);
           response.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
             .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at selecint contents`));
         }
@@ -76,7 +76,7 @@ export async function analyzing (response, target) {
 
         if(err) {
 
-          logger.err(err.message);
+          logger.error(err.message);
           response.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
             .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred at inserting setiment results`));
         } else {

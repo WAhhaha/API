@@ -46,7 +46,7 @@ CREATE TABLE sentiments (
 DELIMITER //
 CREATE PROCEDURE get_sentiments()
 BEGIN
-  SELECT COUNT(*) AS count FROM sentimens;
+  SELECT COUNT(*) AS count FROM sentiments;
   SELECT * FROM sentiments INNER JOIN titles ON titles.titleId = sentiments.titleId WHERE titles.source = 'PTT';
   SELECT * FROM sentiments INNER JOIN titles ON titles.titleId = sentiments.titleId WHERE titles.source = 'DCARD';
   SELECT * FROM sentiments INNER JOIN titles ON titles.titleId = sentiments.titleId WHERE titles.source = 'GAMER';
