@@ -53,4 +53,19 @@ BEGIN
   SELECT * FROM sentiments INNER JOIN titles ON titles.titleId = sentiments.titleId WHERE titles.source = 'FB';
   TRUNCATE TABLE sentiments;
 END //
+
+DELIMITER //
+CREATE PROCEDURE test()
+BEGIN
+  SELECT * FROM titles;
+END //
+
+
+DELIMITER //
+CREATE PROCEDURE insert_title_content(IN source TEXT(32), IN title TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci, IN content TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci, IN url TEXT(256))
+BEGIN
+  INSERT INTO titles(source, title, url) VALUES(source, title, url);
+  SET @LAST_ID = LAST_INSERT_ID();
+  INSERT INTO contents(titleId, content) VALUES(@LAST_ID, content);
+END //
 DELIMITER;

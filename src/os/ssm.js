@@ -1,7 +1,6 @@
 import db from '../db/mysql.config.js';
 
 import analyze from "./dfn/analyze.js";
-import { insertTitle, getLastId, insertContent, readfile } from "./functions.js";
 
 import HttpStatus from '../utils/HttpStatus.js';
 import Response from '../utils/response.js';
@@ -64,6 +63,8 @@ export async function analyzing (response, target) {
     };
 
     result = await analyze(target, content.content);
+
+    if(!result) continue;
     
     let sentiment = {
       titleId: content.titleId,
@@ -91,21 +92,4 @@ export async function analyzing (response, target) {
     .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `sentiments analyzment done`));
 
 }
-
-export async function insertPTTdata(path) {
-
-  let file = readfile(path);
-  let res = '';
-
-  for(let i = 0; i < file.PTT.length; i++) {
-
-    let data = file.PTT[i];
-    let src = 'PTT';
-
-    res = await insertTitle(src, data)
-    .then(() => getLastId())
-    .then((result) => insertContent(data, result[0].lastId));
-  }
-}
-
 

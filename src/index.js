@@ -7,7 +7,7 @@ import Response from './utils/response.js';
 import HttpStatus from './utils/HttpStatus.js';
 import logger from './utils/logger.js';
 
-import testRoutes from './routes/test.routes.js';
+import devRoutes from './routes/dev.routes.js';
 import mainRoutes from './routes/main.routes.js';
  
 
@@ -17,7 +17,7 @@ const app = express();
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-app.use('/test', testRoutes);
+app.use('/dev', devRoutes);
 app.use('/', mainRoutes);
 app.get('/', (req, res) => res.send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, 'SAproject API with openai, v1.0.0, working well')));
 
