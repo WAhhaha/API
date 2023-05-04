@@ -63,6 +63,8 @@ export async function analyzing (response, target) {
     };
 
     result = await analyze(target, content.content);
+
+    if(!result) continue;
     
     let sentiment = {
       titleId: content.titleId,
