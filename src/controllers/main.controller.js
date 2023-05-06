@@ -10,9 +10,7 @@ export const createAnalysis = (request, response) => {
 
   logger.info(`${request.method}, ${request.originalUrl}, analyzing the sentiments for the contents`);
 
-  let data = request.body;
-
-  analyzing(response, data.target);
+  analyzing(response, request.body.target);
 };
 
 export const getSentiments = (request, response) => {
