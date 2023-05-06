@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prod": "NODE_ENV=prod nodemon src/index.js",
+    "start": "forever start -c nodemon src/index.js",
+    "list": "forever list",
+    "stop": "forever stop 0"
   },
   "author": "ahhaha9191",
   "license": "ISC",
@@ -24,6 +27,7 @@
     "pino-pretty": "^10.0.0"
   },
   "devDependencies": {
+    "forever": "^4.0.3",
     "nodemon": "^2.0.22"
   }
 }

@@ -23,7 +23,7 @@ export default async function(target, content) {
     model: "text-davinci-003",
     prompt: prompt(target, content),
     temperature: 0,
-    max_tokens: 512,
+    max_tokens: 1000,
   });
   
   let data = JSON.parse(completion.data.choices[0].text);
@@ -42,8 +42,11 @@ export default async function(target, content) {
 
 function prompt(target, content) {
 
-  return `請將以下的資料，進行情緒與"${target}"的正負面評分，評分標準0~5，並且根據文章內的提問給出適當的回答，若文章與"${target}"無關則評分為-1且回答為-1。
-資料格式為{"score":評分 , "answer":"回答"}
+  return `Please evaluate the sentiment towards "${target}" based on the provided data. The rating scale is from 0 to 5. 
+Provide appropriate answers based on the questions within the article. 
+If the article is unrelated to "${target}", rate it as -1 and provide an answer as -1.
+  
+The data format is {"score": rating, "answer": "response"}
 
 ${content}`;
 }
