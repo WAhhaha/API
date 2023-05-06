@@ -69,11 +69,12 @@ export async function analyzing (response, target) {
     let sentiment = {
       titleId: content.titleId,
       score: result.score,
+      answer: result.answer,
     };
 
     result = await new Promise((resolve) => {
 
-      db.query('INSERT INTO sentiments(titleId, score) VALUES(?, ?)', Object.values(sentiment), (err, result) => {
+      db.query('INSERT INTO sentiments(titleId, score, answer) VALUES(?, ?, ?)', Object.values(sentiment), (err, result) => {
 
         if(err) {
 

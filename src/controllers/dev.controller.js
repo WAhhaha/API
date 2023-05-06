@@ -24,6 +24,7 @@ export const testPostData = (request ,response) => {
   logger.info(`${request.method}, ${request.originalUrl}, posting a data`);
   
   let data = request.body;
+  console.log(data);
 
   response.status(HttpStatus.CREATED.code)
     .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `data posted`, data));
