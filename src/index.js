@@ -17,9 +17,9 @@ const app = express();
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 
-app.use('/dev', devRoutes);
-app.use('/', mainRoutes);
 app.get('/', (req, res) => res.send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, 'SAproject API with openai, v1.0.0, working well')));
+app.use('/', mainRoutes);
+app.use('/dev', devRoutes);
 
 app.listen(PORT, () => logger.info(`Server running on: ${ip.address()}:${PORT}`));
 
