@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS maindb;
 
-ALTER DATABASE maindb DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+ALTER DATABASE maindb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE maindb;
 
@@ -12,9 +12,9 @@ DROP TABLE IF EXISTS sentiments;
 CREATE TABLE titles (
   titleId   INT UNSIGNED NOT NULL AUTO_INCREMENT,
 
-  source    TEXT(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  title     TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  url       TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+  source    TEXT(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  title     TEXT(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  url       TEXT(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
 
   CONSTRAINT pk_titles PRIMARY KEY (titleId)
 );
@@ -23,7 +23,7 @@ CREATE TABLE contents (
   contentId   INT UNSIGNED NOT NULL AUTO_INCREMENT,
   titleId     INT UNSIGNED NOT NULL,
 
-  content     TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  content     TEXT(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
 
   CONSTRAINT pk_contents PRIMARY KEY (contentId),
   CONSTRAINT fk_contentstitles FOREIGN KEY (titleId)
@@ -62,7 +62,7 @@ END //
 
 
 DELIMITER //
-CREATE PROCEDURE insert_title_content(IN source TEXT(32), IN title TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci, IN content TEXT(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci, IN url TEXT(256))
+CREATE PROCEDURE insert_title_content(IN source TEXT(32), IN title TEXT(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, IN content TEXT(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci, IN url TEXT(256))
 BEGIN
   INSERT INTO titles(source, title, url) VALUES(source, title, url);
   SET @LAST_ID = LAST_INSERT_ID();
