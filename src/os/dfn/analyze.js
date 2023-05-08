@@ -7,7 +7,7 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 export default async function(target, content) {
-
+/*
   if(!config.apiKey) {
 
       console.log(`Wrong APIKey`);
@@ -26,12 +26,11 @@ export default async function(target, content) {
   });
   
   let data = JSON.parse(completion.data.choices[0].text);
-
+*/
   let sentiment = {
-    score: data.score,
+    //score: data.score,
     //answer: data.answer,
-    //score: Math.random() * 5,
-    answer: "test answer",
+    score: Math.random() * 5,
   };
 
   if(sentiment.score == -10) return false;

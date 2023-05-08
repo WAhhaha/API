@@ -1,8 +1,11 @@
+import cliProgress from 'cli-progress';
+
 import logger from '../utils/logger.js';
 import HttpStatus from '../utils/HttpStatus.js';
 import Response from '../utils/response.js';
 
 import db from '../db/mysql.config.js';
+import {readfile} from '../os/functions.js';
 import analyze from '../os/dfn/analyze.js';
 
 
@@ -35,9 +38,16 @@ export const getSentiments = (request, response) => {
 export const exeAnalyze = async (request, response) => {
 
   logger.info(`${request.method}, ${request.originalUrl}, executing analyzment`);
-  
+
   let results = '';
   let waiting = '';
+
+  waiting = await new Promise((resolve) => {
+
+    setTimeout(() => {
+      resolve(1);
+    }, 1000);
+  });
 
   results = await new Promise((resolve) => {
 
@@ -62,18 +72,19 @@ export const exeAnalyze = async (request, response) => {
   });
 
   let contents = results;
+  let bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  bar1.start(contents.length, 0);
   for(let i = 0; i < contents.length; i++) {
 
     results = await analyze(request.body.target, contents[i].content);
     let sentiments = {
       titleId: contents[i].titleId,
       score: results.score,
-      answer: results.answer,
     };
 
     waiting = await new Promise((resolve) => {
 
-      db.query('INSERT INTO sentiments(titleId, score, answer) VALUES(?, ?, ?)', Object.values(sentiments), (err, results) => {
+      db.query('INSERT INTO sentiments(titleId, score) VALUES(?, ?)', Object.values(sentiments), (err, results) => {
 
         if(err) {
           
@@ -85,21 +96,35 @@ export const exeAnalyze = async (request, response) => {
         resolve(results);
       });
     });
+
+    bar1.update(i + 1);
   }
+  bar1.stop();
 
   response.status(HttpStatus.OK.code)
     .send(new Response(HttpStatus.OK.code, HttpStatus.OK.status, `sentiments inserted`));
 };
 
-export const insertDataPackage = (request, response) => {
+export const insertDataPackage = async (request, response) => {
 
   logger.info(`${request.method}, ${request.originalUrl}, inserting datas`);
 
-  let file = readfile('/home/ahhaha9191/Documents/SAproject/API/datafiles/json/content.json');
+  let waiting = await new Promise((resolve) => {
+    
+    setTimeout(() => {
+      resolve(1);
+    }, 1000);
+  });
+
+  let file = readfile('/home/ahhaha9191/Documents/SAproject/API/content.json');
+
+  let bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
+  bar1.start(file.PTT.length, 0);
+
   for(let i = 0; i < file.PTT.length; i++) {
 
     let data = {
-      src: 'PTT',
+      src: "PTT",
       title: file.PTT[i].Title,
       content: file.PTT[i].Contents,
       url: file.PTT[i].Url,
@@ -107,15 +132,11 @@ export const insertDataPackage = (request, response) => {
 
     db.query('CALL insert_title_content(?, ?, ?, ?)', Object.values(data), (err, results) => {
 
-      if(err) {
-        
-        logger.error(err.message);
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR.code)
-          .send(new Response(HttpStatus.INTERNAL_SERVER_ERROR.code, HttpStatus.INTERNAL_SERVER_ERROR.status, `error occurred while inserting data`));
-      }
     });
 
+    bar1.update(i + 1);
   }
+  bar1.stop();
 
   response.status(HttpStatus.CREATED.code)
     .send(new Response(HttpStatus.CREATED.code, HttpStatus.CREATED.status, `inserted`));
