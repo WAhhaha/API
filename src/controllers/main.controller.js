@@ -116,18 +116,18 @@ export const insertDataPackage = async (request, response) => {
     }, 1000);
   });
 
-  let file = readfile('/home/ahhaha9191/Documents/SAproject/API/content.json');
+  let file = readfile('/home/ahhaha9191/Documents/SAproject/API/Demo.json');
 
   let bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-  bar1.start(file.PTT.length, 0);
+  bar1.start(file.Results.length, 0);
 
-  for(let i = 0; i < file.PTT.length; i++) {
+  for(let i = 0; i < file.Results.length; i++) {
 
     let data = {
       src: "PTT",
-      title: file.PTT[i].Title,
-      content: file.PTT[i].Contents,
-      url: file.PTT[i].Url,
+      title: file.Results[i].Title,
+      content: file.Results[i].Contents,
+      url: file.Results[i].Url,
     };
 
     db.query('CALL insert_title_content(?, ?, ?, ?)', Object.values(data), (err, results) => {

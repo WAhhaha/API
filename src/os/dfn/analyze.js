@@ -40,7 +40,7 @@ export default async function(target, content) {
 function prompt(target, content) {
 
   return `請將以下的資料，進行情緒與"薩爾達傳說"的正負面評分，評分標準0~5，若內容與"薩爾達傳說"無關則為-1。
-資料格式以{"score":{評分}}
+資料格式為{ "score":評分 }
 
 ${content}`;
 }
